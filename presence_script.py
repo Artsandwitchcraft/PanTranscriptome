@@ -37,7 +37,7 @@ def find_match(df, sample_list):
     Outpus:
          a list of all the column names where a sample name provided by sample_list is in the column name
     '''
-    return [col_name for col_name in df.columns for sample in sample_list if sample in col_name]
+    return [col_name for col_name in df.columns  if col_name in sample_list]
 
 def parse_meta_data(meta_data):
     '''
@@ -59,7 +59,11 @@ def parse_meta_data(meta_data):
     pwd = os.getcwd()
     try:
         meta_data_list = os.listdir(pwd+meta_data)
-        all_samples = {str(sample_list): open(pwd+meta_data+sample_list, 'r').read().split('\n')[:-1] for sample_list in meta_data_list}
+        #Make a dict of clade name and samples in clade
+        #Read in clade_list.txt, make list of sample names
+        #strip out white spaces
+        #ignore last empty space
+        all_samples = {str(sample_list): list(map(lambda s: s.strip(),open(pwd+meta_data+sample_list, 'r').read().split('\n')[:-1])) for sample_list in meta_data_list}
         return all_samples
 
     except Exception as e:
