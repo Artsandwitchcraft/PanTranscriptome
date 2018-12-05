@@ -73,6 +73,8 @@ def write_output(transcripts, out_file):
 
 def main(pan, meta_data, output):
     meta_data = '/' + meta_data
+    if(meta_data[len(meta_data) -1] != '/'):
+        meta_data += '/'
     #read in dataframe
     pan_gene_df = pd.read_csv(pan,index_col=0)
 
