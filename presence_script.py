@@ -16,18 +16,6 @@ def find_interest(means, op):
     '''
     return means[op(means)].index
 
-def clean_names(pat, sample_list):
-    '''
-    standardize the names of samples in sample list by removing pat
-    Inputs;
-        pat: str of pattern to match and remove
-        sample_list: itr with names to clean
-    Outpus:
-        list with cleaned names
-    '''
-    return list(map(lambda sample: sample.replace(pat,''), sample_list))
-
-
 def find_match(df, sample_list):
     '''
     Function to return the samples in df are also in sample_list  
@@ -99,10 +87,9 @@ def main(pan, meta_data, output):
     #parse meta data from meta_data dir
     all_samples = parse_meta_data(meta_data)
     for k,v in all_samples.items():
-        v = clean_names('.filter-RNA', v)
         print("Searching within clade: {}".format(str(k)))
         match_samples = find_match(pan_gene_df, v)
-        print("Within clade  {} found matches: {}".format(str(k), str(match_samples) ))
+        print("Within clade  {} found {} matching samples: {}".format(str(k),len(match_samples), str(match_samples) ))
         absent_ids = find_interest(pan_gene_df[match_samples].mean(axis=1), bp)
         print("Found {} interesting transcripts".format(str(len(absent_ids))))
         write_output(absent_ids, str(k) + output)
